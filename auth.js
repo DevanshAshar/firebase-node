@@ -1,9 +1,8 @@
 const jwt=require('jsonwebtoken')
 const dotenv=require('dotenv').config()
-const admin=require('firebase-admin')
-/*const credentials=require('./key.json')
 
-const db=admin.firestore()*/
+
+const db=require('./config')
 const User=db.collection('users')
 const authentication={
     verifyToken:async(req,res,next)=>{
@@ -20,7 +19,9 @@ const authentication={
         {
             try {
                 const data=jwt.verify(token,process.env.SECRET_KEY)
-                const user=await User.doc(data.email)
+                const user1=await User.doc(data.email)
+                const user2=await user1.get()
+                const user=await user2.data()
                 userData=user
                 next()
             } catch (error) {
